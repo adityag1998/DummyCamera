@@ -11,9 +11,11 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    String intentName;
-    EditText intentInput;
-    Button sendButton;
+    protected String objectName;
+    protected EditText intentInput;
+    protected Button sendButton;
+    protected static final String RECEIVE_OBJECT_NAME = "com.example.dummycamera.receive_object_name";
+    protected static final String KEY = "com.example.dummycamera.objectName";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,29 +24,33 @@ public class MainActivity extends AppCompatActivity {
 
         intentInput = (EditText) findViewById(R.id.intentInput);
         sendButton = (Button) findViewById(R.id.sendButton);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Logic to publish Broadcast Intent
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intentName = intentInput.getText().toString();
-
-                if (intentName.length() == 0) {
-                    showToast("Please Enter Intent Name to send");
-                } else {
-                    Intent launchIntent = getPackageManager().getLaunchIntentForPackage("com.samsung.smartnotes");
-                    if (launchIntent != null) {
-                        showToast("Sending Intent : " + intentName);
-                        launchIntent.putExtra("com.samsung.smartnotes.MainActivity.valueReceived", intentName);
-                        startActivity(launchIntent);
-                    } else {
-                        showToast("Smart Notes not found");
-                    }
+                objectName = intentInput.getText().toString();
+                if (objectName.length() == 0) {
+                    showToast("Please Enter Object Name to Send");
+                }
+                else {
+                    Intent intent = new Intent();
+                    intent.setAction(RECEIVE_OBJECT_NAME); //Custom Action
+                    intent.addCategory("android.intent.category.DEFAULT");
+                    intent.setPackage("com.samsung.smartnotes");
+                    intent.putExtra(KEY, objectName);
+                    sendBroadcast(intent);
+                    showToast("Broadcast is Fired with Object Name : " + objectName);
                 }
             }
         });
     }
 
-    public void showToast(String text) {
+    protected void showToast(String text) {
         Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
     }
 }
