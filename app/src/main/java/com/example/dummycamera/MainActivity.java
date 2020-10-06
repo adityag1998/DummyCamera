@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Class Members
-    protected static final String RECEIVE_OBJECT_NAME = "com.samsung.navicam.parse_object_text_bundle";
+    protected static final String PARSE_BUNDLE = "com.samsung.navicam.parse_bundle";
     protected static final String KEY1 = "com.samsung.navicam.ObjectList";
     protected static final String KEY2 = "com.samsung.navicam.text";
     protected static final String BENEFICIARY = "com.samsung.smartnotes";
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void sendBroadcastIntent (Bundle bundle) {
         Intent intent = new Intent();
-        intent.setAction(RECEIVE_OBJECT_NAME);
+        intent.setAction(PARSE_BUNDLE);
         intent.addCategory("android.intent.category.DEFAULT");
         intent.setPackage("com.samsung.smartnotes");
         intent.putExtras(bundle);
